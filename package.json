@@ -1,0 +1,12 @@
+{
+    "name": "roofing-calculator",
+    "version": "1.0.0",
+    "description": "Roofing Cost Estimator",
+    "main": "server.js",
+    "scripts": {
+        "dev": "node server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    }
+}

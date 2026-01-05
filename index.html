@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roofing Cost Estimator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            900: '#0f172a',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .slide-enter {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0f172a;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Main Landing View -->
+    <div id="landingView" class="text-center space-y-6">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-navy-900 tracking-tight leading-tight">
+            Professional Roofing <br> Made Simple.
+        </h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto">
+            Get an accurate estimate for your home in seconds using our advanced calculation engine.
+        </p>
+        <button onclick="openModal()"
+            class="px-8 py-4 bg-navy-900 text-white text-lg font-bold rounded-full shadow-xl hover:bg-slate-800 hover:shadow-2xl transition-all transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-navy-900/30">
+            Get Instant Roof Estimate
+        </button>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modalOverlay"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity opacity-0 flex items-center justify-center p-4">
+
+        <!-- Modal Container -->
+        <div id="modalContainer"
+            class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden transform scale-95 transition-all duration-300 relative">
+
+            <!-- Close Button -->
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10 p-1 rounded-full hover:bg-gray-100 transition-colors">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- ProgressBar -->
+            <div id="progressBarContainer" class="h-1.5 bg-gray-100 w-full">
+                <div id="progressBar" class="h-full bg-navy-900 transition-all duration-500 ease-out"
+                    style="width: 33%"></div>
+            </div>
+
+            <div class="p-8">
+
+                <!-- Step 1: Square Footage -->
+                <div id="step1" class="step-content">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">How big is your roof?</h2>
+                    <p class="text-gray-500 mb-6">Enter the approximate square footage of your project.</p>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Square Footage</label>
+                        <div class="relative">
+                            <input type="number" id="sizeInput" placeholder="e.g. 2500" min="1"
+                                class="block w-full text-lg p-4 pl-4 border-2 border-gray-200 rounded-xl focus:border-navy-900 focus:ring-0 transition-colors outline-none bg-gray-50 focus:bg-white text-gray-900 font-semibold placeholder-gray-400">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">sq.
+                                ft.</span>
+                        </div>
+                        <p id="sizeError" class="text-red-500 text-sm mt-2 hidden">Please enter a valid size.</p>
+                    </div>
+
+                    <button onclick="goToStep(2)"
+                        class="w-full py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
+                        Next Step
+                    </button>
+                </div>
+
+                <!-- Step 2: Material -->
+                <div id="step2" class="step-content hidden text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Choose your material</h2>
+                    <p class="text-gray-500 mb-6">Select the type of roofing material you prefer.</p>
+
+                    <div class="grid grid-cols-1 gap-4 mb-8">
+                        <!-- Asphalt Card -->
+                        <div onclick="selectMaterial('Asphalt')" id="card-Asphalt"
+                            class="material-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-navy-900/50 transition-all group">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-blue-50 transition-colors">
+                                    🏠
+                                </div>
+                                <div class="text-left ml-4">
+                                    <h3 class="font-bold text-gray-900">Asphalt Shingle</h3>
+                                    <p class="text-xs text-gray-500">$5.50 / sq. ft.</p>
+                                </div>
+                            </div>
+                            <div
+                                class="check-icon w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-transparent">
+                                ✓
+                            </div>
+                        </div>
+
+                        <!-- Metal Card -->
+                        <div onclick="selectMaterial('Metal')" id="card-Metal"
+                            class="material-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-navy-900/50 transition-all group">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-blue-50 transition-colors">
+                                    🏗️
+                                </div>
+                                <div class="text-left ml-4">
+                                    <h3 class="font-bold text-gray-900">Metal Seam</h3>
+                                    <p class="text-xs text-gray-500">$12.00 / sq. ft.</p>
+                                </div>
+                            </div>
+                            <div
+                                class="check-icon w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-transparent">
+                                ✓
+                            </div>
+                        </div>
+
+                        <!-- Tile Card -->
+                        <div onclick="selectMaterial('Tile')" id="card-Tile"
+                            class="material-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-navy-900/50 transition-all group">
+                            <div class="flex items-center">
+                                <div
+                                    class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-blue-50 transition-colors">
+                                    🏛️
+                                </div>
+                                <div class="text-left ml-4">
+                                    <h3 class="font-bold text-gray-900">Clay Tile</h3>
+                                    <p class="text-xs text-gray-500">$22.50 / sq. ft.</p>
+                                </div>
+                            </div>
+                            <div
+                                class="check-icon w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-transparent">
+                                ✓
+                            </div>
+                        </div>
+                    </div>
+                    <p id="materialError" class="text-red-500 text-sm mb-4 hidden">Please select a material.</p>
+
+                    <button onclick="goToStep(3)"
+                        class="w-full py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
+                        Next Step
+                    </button>
+                </div>
+
+                <!-- Step 3: Email -->
+                <div id="step3" class="step-content hidden text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Where should we send it?</h2>
+                    <p class="text-gray-500 mb-6">Enter your email to receive your instant detailed quote.</p>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2 text-left">Email Address</label>
+                        <input type="email" id="emailInput" placeholder="you@example.com"
+                            class="block w-full text-lg p-4 border-2 border-gray-200 rounded-xl focus:border-navy-900 focus:ring-0 transition-colors outline-none bg-gray-50 focus:bg-white text-gray-900 placeholder-gray-400">
+                        <p id="emailError" class="text-red-500 text-sm mt-2 hidden text-left">Please enter a valid
+                            email.</p>
+                    </div>
+
+                    <button onclick="getEstimate()"
+                        class="w-full py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl flex items-center justify-center">
+                        <span id="btnText">Get Price</span>
+                        <div id="btnLoader" class="loader ml-3 hidden border-white border-t-transparent"></div>
+                    </button>
+                </div>
+
+                <!-- Result View -->
+                <div id="resultView" class="step-content hidden text-center py-6">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-6">
+                        <svg class="w-10 h-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+
+                    <p class="text-gray-500 font-medium mb-1">Estimated Project Cost</p>
+                    <h2 id="finalPrice" class="text-5xl font-extrabold text-navy-900 tracking-tight mb-6">$0.00</h2>
+
+                    <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-8">
+                        <p class="text-sm text-blue-800">
+                            A detailed breakdown has been sent to <br> <span id="finalEmail" class="font-bold"></span>
+                        </p>
+                    </div>
+
+                    <button onclick="closeModal()"
+                        class="text-gray-500 font-medium hover:text-navy-900 transition-colors">
+                        Close & Start Over
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let state = {
+            step: 1,
+            size: null,
+            material: null,
+            email: null
+        };
+
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalContainer = document.getElementById('modalContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressBarContainer = document.getElementById('progressBarContainer');
+
+        function openModal() {
+            // Reset state
+            state = { step: 1, size: null, material: null, email: null };
+            document.getElementById('sizeInput').value = '';
+            document.getElementById('emailInput').value = '';
+            document.getElementById('resultView').classList.add('hidden');
+            document.querySelectorAll('.material-card').forEach(el => resetCardStyle(el));
+
+            // Show first step
+            showStep(1);
+            progressBarContainer.classList.remove('hidden');
+
+            // Show Modal
+            modalOverlay.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modalOverlay.classList.remove('opacity-0');
+                modalContainer.classList.remove('scale-95');
+                modalContainer.classList.add('scale-100');
+            });
+        }
+
+        function closeModal() {
+            modalOverlay.classList.add('opacity-0');
+            modalContainer.classList.remove('scale-100');
+            modalContainer.classList.add('scale-95');
+            setTimeout(() => {
+                modalOverlay.classList.add('hidden');
+            }, 300);
+        }
+
+        function showStep(stepNumber) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step${stepNumber}`).classList.remove('hidden');
+            document.getElementById(`step${stepNumber}`).classList.add('slide-enter');
+
+            // Update Progress
+            const progress = (stepNumber / 3) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            state.step = stepNumber;
+        }
+
+        function goToStep(stepNumber) {
+            // Validation
+            if (stepNumber === 2) {
+                const size = document.getElementById('sizeInput').value;
+                if (!size || size <= 0) {
+                    document.getElementById('sizeError').classList.remove('hidden');
+                    return;
+                }
+                document.getElementById('sizeError').classList.add('hidden');
+                state.size = Number(size);
+            }
+            if (stepNumber === 3) {
+                if (!state.material) {
+                    document.getElementById('materialError').classList.remove('hidden');
+                    return;
+                }
+                document.getElementById('materialError').classList.add('hidden');
+            }
+
+            showStep(stepNumber);
+        }
+
+        function selectMaterial(mat) {
+            state.material = mat;
+
+            // Reset all cards
+            document.querySelectorAll('.material-card').forEach(el => resetCardStyle(el));
+
+            // Activate selected card
+            const activeCard = document.getElementById(`card-${mat}`);
+            activeCard.classList.add('border-navy-900', 'bg-blue-50/50', 'ring-1', 'ring-navy-900');
+            activeCard.classList.remove('border-gray-200');
+
+            const checkIcon = activeCard.querySelector('.check-icon');
+            checkIcon.classList.add('bg-navy-900', 'border-navy-900', 'text-white');
+            checkIcon.classList.remove('border-gray-300', 'text-transparent');
+
+            // Hide Error
+            document.getElementById('materialError').classList.add('hidden');
+        }
+
+        function resetCardStyle(el) {
+            el.classList.remove('border-navy-900', 'bg-blue-50/50', 'ring-1', 'ring-navy-900');
+            el.classList.add('border-gray-200');
+            const check = el.querySelector('.check-icon');
+            check.classList.remove('bg-navy-900', 'border-navy-900', 'text-white');
+            check.classList.add('border-gray-300', 'text-transparent');
+        }
+
+        async function getEstimate() {
+            const email = document.getElementById('emailInput').value;
+            if (!email || !email.includes('@')) {
+                document.getElementById('emailError').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('emailError').classList.add('hidden');
+            state.email = email;
+
+            // Loading State
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            btnText.textContent = 'Calculating...';
+            btnLoader.classList.remove('hidden');
+
+            try {
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(state)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Show Result
+                    const formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                    });
+                    document.getElementById('finalPrice').textContent = formatter.format(data.price);
+                    document.getElementById('finalEmail').textContent = state.email;
+
+                    // Hide step 3, show result
+                    document.getElementById('step3').classList.add('hidden');
+                    document.getElementById('resultView').classList.remove('hidden');
+                    document.getElementById('resultView').classList.add('slide-enter');
+
+                    // Hide Progress Bar
+                    progressBarContainer.classList.add('hidden');
+
+                } else {
+                    alert('Something went wrong.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Connection error. Ensure backend is running.');
+            } finally {
+                btnText.textContent = 'Get Price';
+                btnLoader.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>
