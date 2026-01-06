@@ -5,7 +5,7 @@ exports.handler = async (event, context) => {
             return { statusCode: 405, body: 'Method Not Allowed' };
         }
 
-        const { size, material, email } = JSON.parse(event.body);
+        const { size, material, email, need } = JSON.parse(event.body);
 
         // Validate inputs
         if (!size || !material || !email) {
@@ -34,19 +34,20 @@ exports.handler = async (event, context) => {
         // Base Cost
         const baseCost = size * rate;
 
-        // Labor Buffer (Random between 5-10%)
-        const bufferPercentage = Math.random() * (0.10 - 0.05) + 0.05;
-        const laborBuffer = baseCost * bufferPercentage;
-
-        const totalCost = baseCost + laborBuffer;
+        // Calculate Range
+        // Low end: +5% buffer
+        // High end: +15% buffer
+        const minPrice = baseCost * 1.05;
+        const maxPrice = baseCost * 1.15;
 
         // Log Captured Email
-        console.log(`Captured Lead: ${email} for ${size} sqft of ${material}`);
+        console.log(`Captured Lead: ${email} for ${size} sqft of ${material} (Need: ${need})`);
 
         return {
             statusCode: 200,
             body: JSON.stringify({
-                price: totalCost.toFixed(2),
+                minPrice: minPrice.toFixed(2),
+                maxPrice: maxPrice.toFixed(2),
                 success: true
             })
         };

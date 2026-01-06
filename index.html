@@ -102,107 +102,108 @@
             <!-- ProgressBar -->
             <div id="progressBarContainer" class="h-1.5 bg-gray-100 w-full">
                 <div id="progressBar" class="h-full bg-navy-900 transition-all duration-500 ease-out"
-                    style="width: 33%"></div>
+                    style="width: 25%"></div>
             </div>
 
             <div class="p-8">
 
-                <!-- Step 1: Square Footage -->
+                <!-- Step 1: Need -->
                 <div id="step1" class="step-content">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">How big is your roof?</h2>
-                    <p class="text-gray-500 mb-6">Enter the approximate square footage of your project.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">What do you need?</h2>
+                    <p class="text-gray-500 mb-6">Select the option that best describes your project.</p>
 
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Square Footage</label>
-                        <div class="relative">
-                            <input type="number" id="sizeInput" placeholder="e.g. 2500" min="1"
-                                class="block w-full text-lg p-4 pl-4 border-2 border-gray-200 rounded-xl focus:border-navy-900 focus:ring-0 transition-colors outline-none bg-gray-50 focus:bg-white text-gray-900 font-semibold placeholder-gray-400">
-                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">sq.
-                                ft.</span>
-                        </div>
-                        <p id="sizeError" class="text-red-500 text-sm mt-2 hidden">Please enter a valid size.</p>
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        <button onclick="selectNeed('Repair')" id="need-Repair"
+                            class="need-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900 group-hover:text-navy-900">Roof repair</span>
+                        </button>
+                        <button onclick="selectNeed('Replacement')" id="need-Replacement"
+                            class="need-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900 group-hover:text-navy-900">Roof replacement</span>
+                        </button>
+                        <button onclick="selectNeed('Cost')" id="need-Cost"
+                            class="need-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900 group-hover:text-navy-900">Just exploring cost</span>
+                        </button>
                     </div>
+
+                    <p id="needError" class="text-red-500 text-sm mb-4 hidden">Please select an option.</p>
 
                     <button onclick="goToStep(2)"
                         class="w-full py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
-                        Next Step
+                        Next
                     </button>
                 </div>
 
                 <!-- Step 2: Material -->
-                <div id="step2" class="step-content hidden text-center">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Choose your material</h2>
-                    <p class="text-gray-500 mb-6">Select the type of roofing material you prefer.</p>
+                <div id="step2" class="step-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Roof type</h2>
+                    <p class="text-gray-500 mb-6">Choose your preferred material.</p>
 
-                    <div class="grid grid-cols-1 gap-4 mb-8">
-                        <!-- Asphalt Card -->
-                        <div onclick="selectMaterial('Asphalt')" id="card-Asphalt"
-                            class="material-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-navy-900/50 transition-all group">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-blue-50 transition-colors">
-                                    🏠
-                                </div>
-                                <div class="text-left ml-4">
-                                    <h3 class="font-bold text-gray-900">Asphalt Shingle</h3>
-                                    <p class="text-xs text-gray-500">$5.50 / sq. ft.</p>
-                                </div>
-                            </div>
-                            <div
-                                class="check-icon w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-transparent">
-                                ✓
-                            </div>
-                        </div>
-
-                        <!-- Metal Card -->
-                        <div onclick="selectMaterial('Metal')" id="card-Metal"
-                            class="material-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-navy-900/50 transition-all group">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-blue-50 transition-colors">
-                                    🏗️
-                                </div>
-                                <div class="text-left ml-4">
-                                    <h3 class="font-bold text-gray-900">Metal Seam</h3>
-                                    <p class="text-xs text-gray-500">$12.00 / sq. ft.</p>
-                                </div>
-                            </div>
-                            <div
-                                class="check-icon w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-transparent">
-                                ✓
-                            </div>
-                        </div>
-
-                        <!-- Tile Card -->
-                        <div onclick="selectMaterial('Tile')" id="card-Tile"
-                            class="material-card cursor-pointer border-2 border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-navy-900/50 transition-all group">
-                            <div class="flex items-center">
-                                <div
-                                    class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl group-hover:bg-blue-50 transition-colors">
-                                    🏛️
-                                </div>
-                                <div class="text-left ml-4">
-                                    <h3 class="font-bold text-gray-900">Clay Tile</h3>
-                                    <p class="text-xs text-gray-500">$22.50 / sq. ft.</p>
-                                </div>
-                            </div>
-                            <div
-                                class="check-icon w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center text-transparent">
-                                ✓
-                            </div>
-                        </div>
+                    <div class="grid grid-cols-1 gap-3 mb-6">
+                        <button onclick="selectMaterial('Shingle')" id="mat-Shingle"
+                            class="material-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">Shingle</span>
+                        </button>
+                        <button onclick="selectMaterial('Metal')" id="mat-Metal"
+                            class="material-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">Metal</span>
+                        </button>
+                        <button onclick="selectMaterial('Tile')" id="mat-Tile"
+                            class="material-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">Tile</span>
+                        </button>
+                        <button onclick="selectMaterial('NotSure')" id="mat-NotSure"
+                            class="material-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">Not sure</span>
+                        </button>
                     </div>
                     <p id="materialError" class="text-red-500 text-sm mb-4 hidden">Please select a material.</p>
 
-                    <button onclick="goToStep(3)"
-                        class="w-full py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
-                        Next Step
-                    </button>
+                    <div class="flex gap-3">
+                        <button onclick="goToStep(1)"
+                            class="w-1/3 py-3.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition-all">Back</button>
+                        <button onclick="goToStep(3)"
+                            class="w-2/3 py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">Next</button>
+                    </div>
                 </div>
 
-                <!-- Step 3: Email -->
-                <div id="step3" class="step-content hidden text-center">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Where should we send it?</h2>
+                <!-- Step 3: Size -->
+                <div id="step3" class="step-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Approximate home size</h2>
+                    <p class="text-gray-500 mb-6">Select the range that best fits your home.</p>
+
+                    <div class="grid grid-cols-1 gap-3 mb-6">
+                        <button onclick="selectSize('Small')" id="size-Small"
+                            class="size-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">Under 1,000 sq ft</span>
+                        </button>
+                        <button onclick="selectSize('Medium')" id="size-Medium"
+                            class="size-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">1,000–2,000 sq ft</span>
+                        </button>
+                        <button onclick="selectSize('Large')" id="size-Large"
+                            class="size-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">2,000–3,000 sq ft</span>
+                        </button>
+                        <button onclick="selectSize('XLarge')" id="size-XLarge"
+                            class="size-option w-full p-4 text-left border-2 border-gray-200 rounded-xl hover:border-navy-900 hover:bg-blue-50 transition-all group">
+                            <span class="font-bold text-gray-900">3,000+ sq ft</span>
+                        </button>
+                    </div>
+                    <p id="sizeError" class="text-red-500 text-sm mb-4 hidden">Please select a size range.</p>
+
+                    <div class="flex gap-3">
+                        <button onclick="goToStep(2)"
+                            class="w-1/3 py-3.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 transition-all">Back</button>
+                        <button onclick="goToStep(4)"
+                            class="w-2/3 py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Email -->
+                <div id="step4" class="step-content hidden text-center">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Where should we send your estimate?</h2>
                     <p class="text-gray-500 mb-6">Enter your email to receive your instant detailed quote.</p>
 
                     <div class="mb-6">
@@ -215,7 +216,7 @@
 
                     <button onclick="getEstimate()"
                         class="w-full py-3.5 bg-navy-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl flex items-center justify-center">
-                        <span id="btnText">Get Price</span>
+                        <span id="btnText">Get Instant Estimate</span>
                         <div id="btnLoader" class="loader ml-3 hidden border-white border-t-transparent"></div>
                     </button>
                 </div>
@@ -230,13 +231,10 @@
                     </div>
 
                     <p class="text-gray-500 font-medium mb-1">Estimated Project Cost</p>
-                    <h2 id="finalPrice" class="text-5xl font-extrabold text-navy-900 tracking-tight mb-6">$0.00</h2>
+                    <h2 id="finalPrice" class="text-4xl md:text-5xl font-extrabold text-navy-900 tracking-tight mb-6">
+                        $0.00 - $0.00</h2>
 
-                    <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-8">
-                        <p class="text-sm text-blue-800">
-                            A detailed breakdown has been sent to <br> <span id="finalEmail" class="font-bold"></span>
-                        </p>
-                    </div>
+                    <!-- Email text removed as per request -->
 
                     <button onclick="closeModal()"
                         class="text-gray-500 font-medium hover:text-navy-900 transition-colors">
@@ -252,8 +250,9 @@
         // State
         let state = {
             step: 1,
-            size: null,
+            need: null,
             material: null,
+            sizeRange: null,
             email: null
         };
 
@@ -264,11 +263,15 @@
 
         function openModal() {
             // Reset state
-            state = { step: 1, size: null, material: null, email: null };
-            document.getElementById('sizeInput').value = '';
+            state = { step: 1, need: null, material: null, sizeRange: null, email: null };
             document.getElementById('emailInput').value = '';
             document.getElementById('resultView').classList.add('hidden');
-            document.querySelectorAll('.material-card').forEach(el => resetCardStyle(el));
+
+            // Reset Selections UI
+            document.querySelectorAll('.need-option, .material-option, .size-option').forEach(el => resetOptionStyle(el));
+
+            // Hide errors
+            document.querySelectorAll('[id$="Error"]').forEach(el => el.classList.add('hidden'));
 
             // Show first step
             showStep(1);
@@ -299,59 +302,81 @@
             document.getElementById(`step${stepNumber}`).classList.add('slide-enter');
 
             // Update Progress
-            const progress = (stepNumber / 3) * 100;
+            const progress = (stepNumber / 4) * 100;
             progressBar.style.width = `${progress}%`;
 
             state.step = stepNumber;
         }
 
         function goToStep(stepNumber) {
-            // Validation
-            if (stepNumber === 2) {
-                const size = document.getElementById('sizeInput').value;
-                if (!size || size <= 0) {
-                    document.getElementById('sizeError').classList.remove('hidden');
+            // If going back, just go
+            if (stepNumber < state.step) {
+                showStep(stepNumber);
+                return;
+            }
+
+            // Validation for going forward
+            if (state.step === 1) {
+                if (!state.need) {
+                    document.getElementById('needError').classList.remove('hidden');
                     return;
                 }
-                document.getElementById('sizeError').classList.add('hidden');
-                state.size = Number(size);
+                document.getElementById('needError').classList.add('hidden');
             }
-            if (stepNumber === 3) {
+            if (state.step === 2) {
                 if (!state.material) {
                     document.getElementById('materialError').classList.remove('hidden');
                     return;
                 }
                 document.getElementById('materialError').classList.add('hidden');
             }
+            if (state.step === 3) {
+                if (!state.sizeRange) {
+                    document.getElementById('sizeError').classList.remove('hidden');
+                    return;
+                }
+                document.getElementById('sizeError').classList.add('hidden');
+            }
 
             showStep(stepNumber);
         }
 
+        function selectNeed(need) {
+            state.need = need;
+            updateOptionStyles('need', need);
+            document.getElementById('needError').classList.add('hidden');
+            // Auto advance for better UX? Let's stick to button for now or auto? 
+            // Request was simple "What do you need?", doesn't specify auto-advance. 
+            // Providing button is safer.
+        }
+
         function selectMaterial(mat) {
             state.material = mat;
-
-            // Reset all cards
-            document.querySelectorAll('.material-card').forEach(el => resetCardStyle(el));
-
-            // Activate selected card
-            const activeCard = document.getElementById(`card-${mat}`);
-            activeCard.classList.add('border-navy-900', 'bg-blue-50/50', 'ring-1', 'ring-navy-900');
-            activeCard.classList.remove('border-gray-200');
-
-            const checkIcon = activeCard.querySelector('.check-icon');
-            checkIcon.classList.add('bg-navy-900', 'border-navy-900', 'text-white');
-            checkIcon.classList.remove('border-gray-300', 'text-transparent');
-
-            // Hide Error
+            updateOptionStyles('mat', mat);
             document.getElementById('materialError').classList.add('hidden');
         }
 
-        function resetCardStyle(el) {
-            el.classList.remove('border-navy-900', 'bg-blue-50/50', 'ring-1', 'ring-navy-900');
+        function selectSize(range) {
+            state.sizeRange = range;
+            updateOptionStyles('size', range);
+            document.getElementById('sizeError').classList.add('hidden');
+        }
+
+        function updateOptionStyles(prefix, selectedValue) {
+            // Reset all of this type
+            document.querySelectorAll(`[id^="${prefix}-"]`).forEach(el => resetOptionStyle(el));
+
+            // Activate selected
+            const active = document.getElementById(`${prefix}-${selectedValue}`);
+            if (active) {
+                active.classList.add('border-navy-900', 'bg-blue-50', 'ring-1', 'ring-navy-900');
+                active.classList.remove('border-gray-200');
+            }
+        }
+
+        function resetOptionStyle(el) {
+            el.classList.remove('border-navy-900', 'bg-blue-50', 'ring-1', 'ring-navy-900');
             el.classList.add('border-gray-200');
-            const check = el.querySelector('.check-icon');
-            check.classList.remove('bg-navy-900', 'border-navy-900', 'text-white');
-            check.classList.add('border-gray-300', 'text-transparent');
         }
 
         async function getEstimate() {
@@ -369,11 +394,32 @@
             btnText.textContent = 'Calculating...';
             btnLoader.classList.remove('hidden');
 
+            // Map frontend state to backend requirements
+            // Mapping Logic:
+            // Material: Shingle->Asphalt, Metal->Metal, Tile->Tile, NotSure->Asphalt
+            // Size: Small->1000, Medium->1500, Large->2500, XLarge->3500
+
+            let backendMaterial = 'Asphalt';
+            if (state.material === 'Metal') backendMaterial = 'Metal';
+            if (state.material === 'Tile') backendMaterial = 'Tile';
+
+            let backendSize = 1000;
+            if (state.sizeRange === 'Medium') backendSize = 1500;
+            if (state.sizeRange === 'Large') backendSize = 2500;
+            if (state.sizeRange === 'XLarge') backendSize = 3500;
+
+            const payload = {
+                size: backendSize,
+                material: backendMaterial,
+                email: state.email,
+                need: state.need
+            };
+
             try {
                 const response = await fetch('/api/calculate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(state)
+                    body: JSON.stringify(payload)
                 });
 
                 const data = await response.json();
@@ -383,12 +429,17 @@
                     const formatter = new Intl.NumberFormat('en-US', {
                         style: 'currency',
                         currency: 'USD',
+                        maximumFractionDigits: 0
                     });
-                    document.getElementById('finalPrice').textContent = formatter.format(data.price);
-                    document.getElementById('finalEmail').textContent = state.email;
 
-                    // Hide step 3, show result
-                    document.getElementById('step3').classList.add('hidden');
+                    const minStr = formatter.format(data.minPrice);
+                    const maxStr = formatter.format(data.maxPrice);
+
+                    document.getElementById('finalPrice').textContent = `${minStr} - ${maxStr}`;
+                    // Email display removed
+
+                    // Hide step 4, show result
+                    document.getElementById('step4').classList.add('hidden');
                     document.getElementById('resultView').classList.remove('hidden');
                     document.getElementById('resultView').classList.add('slide-enter');
 
@@ -396,7 +447,7 @@
                     progressBarContainer.classList.add('hidden');
 
                 } else {
-                    alert('Something went wrong.');
+                    alert('Something went wrong: ' + (data.error || 'Unknown error'));
                 }
             } catch (e) {
                 console.error(e);
