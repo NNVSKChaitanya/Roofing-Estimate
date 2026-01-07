@@ -64,6 +64,31 @@
                 transform: rotate(360deg);
             }
         }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #0f172a;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -230,19 +255,41 @@
                         </svg>
                     </div>
 
+                    <p class="text-xl font-bold text-gray-900 mb-2">Here is your estimate!</p>
+
                     <p class="text-gray-500 font-medium mb-1">Estimated Project Cost</p>
-                    <h2 id="finalPrice" class="text-4xl md:text-5xl font-extrabold text-navy-900 tracking-tight mb-6">
+                    <h2 id="finalPrice" class="text-4xl md:text-5xl font-extrabold text-navy-900 tracking-tight mb-2">
                         $0.00 - $0.00</h2>
+                    <p class="text-gray-400 text-sm mb-8">This is a preliminary budget estimate based on local averages.
+                        Final price may vary based on site conditions.</p>
 
-                    <!-- Email text removed as per request -->
-
-                    <button onclick="closeModal()"
-                        class="text-gray-500 font-medium hover:text-navy-900 transition-colors">
-                        Close & Start Over
-                    </button>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="showDemoToast()"
+                            class="px-6 py-4 bg-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:bg-emerald-700 transition-all text-center w-full sm:w-auto">
+                            Book Free Inspection
+                        </button>
+                        <button onclick="openModal()"
+                            class="px-6 py-4 border-2 border-gray-200 text-gray-700 font-bold rounded-xl hover:border-navy-900 hover:text-navy-900 transition-all text-center w-full sm:w-auto">
+                            Recalculate
+                        </button>
+                    </div>
                 </div>
 
             </div>
+        </div>
+    </div>
+
+    <!-- Demo Toast -->
+    <div id="demoToast" class="toast">
+        <svg class="w-6 h-6 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div>
+            <p class="font-bold text-sm">Demo Mode</p>
+            <p class="text-xs text-gray-300">This button would link to your booking calendar or call your office
+                directly.
+            </p>
         </div>
     </div>
 
@@ -456,6 +503,16 @@
                 btnText.textContent = 'Get Price';
                 btnLoader.classList.add('hidden');
             }
+        }
+
+        function showDemoToast() {
+            const toast = document.getElementById('demoToast');
+            toast.classList.add('show');
+
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
         }
     </script>
 </body>
